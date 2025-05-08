@@ -98,11 +98,12 @@ const Header = () => {
 
   const mainMenuItems = useMemo<MenuItem[]>(
     () => [
-      { icon: <FaTachometerAlt />, label: "Dashboard", path: "/" },
+      { icon: <FaTachometerAlt />, label: "Dashboard", path: "/admin/WelcomePage" },
       { icon: <FaCog />, label: "Settings", path: "/settings" },
       { icon: <FaUserShield />, label: "Admin Portal", path: "/admin" },
     ],
     []
+    
   );
 
   const profileMenuItems = useMemo<MenuItem[]>(

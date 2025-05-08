@@ -53,7 +53,7 @@ const InfoSideBar: React.FC<InfoSideBarProps> = ({
             <h3 className="text-lg font-semibold mb-2">Technical Specifications</h3>
             <ul className="text-gray-300 text-sm space-y-2">
               <li><strong>Frontend:</strong> React 18, TypeScript, Tailwind CSS</li>
-              <li><strong>Backend:</strong> Node.js, Express</li>
+              <li><strong>Backend:</strong> Node.js, Prisma</li>
               <li><strong>Database:</strong> MongoDB</li>
               <li><strong>Authentication:</strong> JWT</li>
             </ul>
