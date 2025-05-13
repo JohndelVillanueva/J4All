@@ -6,7 +6,7 @@ type LabelType =
   | 'Admin' 
   | 'Company';
 
-const WelcomePage = () => {
+const AdminWelcomePage = () => {
   const navigate = useNavigate();
 
   const handleCardClick = (label: LabelType) => {
@@ -18,7 +18,7 @@ const WelcomePage = () => {
   };
 
   const cardData: { label: LabelType; subtitle: string; color: string; hoverClass: string }[] = [
-    { label: 'PWD', subtitle: 'Persons with Disabilities', color: '', hoverClass: 'hover:bg-blue-50' },
+    { label: 'PWD', subtitle: 'Persons with Disabilities', color: 'blue', hoverClass: 'hover:bg-blue-50' },
     { label: 'Indigenous People', subtitle: 'Native communities', color: 'green', hoverClass: 'hover:bg-green-50' },
     { label: 'Admin', subtitle: 'Administrator access', color: 'purple', hoverClass: 'hover:bg-purple-50' },
     { label: 'Company', subtitle: 'Corporate accounts', color: 'orange', hoverClass: 'hover:bg-orange-50' }
@@ -48,20 +48,40 @@ const WelcomePage = () => {
                   className={`group flex flex-col h-40 w-full bg-white rounded-lg shadow-md cursor-pointer ${card.hoverClass} transition-all duration-300 overflow-hidden relative`}
                 >
                   <div className="flex-grow p-6">
-                    <h2 className={`text-xl font-semibold text-center text-${card.color}-800`}>
+                    <h2 className={`text-xl font-semibold text-center ${
+                      card.color === 'blue' ? 'text-blue-800' :
+                      card.color === 'green' ? 'text-green-800' :
+                      card.color === 'purple' ? 'text-purple-800' :
+                      'text-orange-800'
+                    }`}>
                       {card.label}
                     </h2>
                     <p className="text-gray-600 mt-1 text-center">
                       {card.subtitle}
                     </p>
                   </div>
-                  <div className={`mt-2 text-center text-sm text-${card.color}-600 pb-2`}>
+                  <div className={`mt-2 text-center text-sm ${
+                    card.color === 'blue' ? 'text-blue-600' :
+                    card.color === 'green' ? 'text-green-600' :
+                    card.color === 'purple' ? 'text-purple-600' :
+                    'text-orange-600'
+                  } pb-2`}>
                     Click to view page →
                   </div>
                   {/* Decorative bottom bar */}
-                  <div className={`absolute bottom-0 left-0 right-0 h-1 bg-${card.color}-500 transition-all duration-300 group-hover:h-2`}></div>
+                  <div className={`absolute bottom-0 left-0 right-0 h-1 ${
+                    card.color === 'blue' ? 'bg-blue-500' :
+                    card.color === 'green' ? 'bg-green-500' :
+                    card.color === 'purple' ? 'bg-purple-500' :
+                    'bg-orange-500'
+                  } transition-all duration-300 group-hover:h-2`}></div>
                   {/* Optional corner accent */}
-                  <div className={`absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 border-${card.color}-500 opacity-50`}></div>
+                  <div className={`absolute top-0 right-0 w-3 h-3 border-t-2 border-r-2 ${
+                    card.color === 'blue' ? 'border-blue-500' :
+                    card.color === 'green' ? 'border-green-500' :
+                    card.color === 'purple' ? 'border-purple-500' :
+                    'border-orange-500'
+                  } opacity-50`}></div>
                 </div>
               ))}
             </div>
@@ -72,4 +92,4 @@ const WelcomePage = () => {
   );
 };
 
-export default WelcomePage;
+export default AdminWelcomePage; 

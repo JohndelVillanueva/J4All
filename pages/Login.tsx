@@ -131,7 +131,7 @@ const LoginPage: React.FC = () => {
     console.log('Form submitted:', data);
     
     // Redirect to admin welcome page
-    navigate('/WelcomePage');
+    navigate('/IndigenousDashboard');
     
     setIsSubmitting(false);
   };
