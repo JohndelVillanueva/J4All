@@ -67,7 +67,7 @@ const IndigenousWelcomePage = () => {
           </p>
           <div className="mt-12 rounded-xl overflow-hidden shadow-xl max-w-4xl mx-auto">
             <img
-              src="../../public/Images/"
+              src="../../public/Images/indi.jpg"
               alt="Indigenous community gathering"
               className="w-full h-auto object-cover"
               loading="lazy"
