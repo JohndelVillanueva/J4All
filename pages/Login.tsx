@@ -131,7 +131,7 @@ const LoginPage: React.FC = () => {
     console.log('Form submitted:', data);
     
     // Redirect to admin welcome page
-    navigate('/admin/WelcomePage');
+    navigate('/WelcomePage');
     
     setIsSubmitting(false);
   };
