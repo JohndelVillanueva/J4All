@@ -98,7 +98,7 @@ const Header = () => {
 
   const mainMenuItems = useMemo<MenuItem[]>(
     () => [
-      { icon: <FaTachometerAlt />, label: "Dashboard", path: "/AdminDashboard" },
+      { icon: <FaTachometerAlt />, label: "Dashboard", path: "/IndigenousDashboard" },
       { icon: <FaCog />, label: "Settings", path: "/settings" },
       { icon: <FaUserShield />, label: "Admin Portal", path: "/admin" },
     ],
@@ -122,7 +122,7 @@ const Header = () => {
 
   const navIcons = useMemo(
     () => [
-      { icon: <FaHome />, path: "/AdminDashboard", label: "Home" },
+      { icon: <FaHome />, path: "/IndigenousDashboard", label: "Home" },
       {
         icon: <FaInfoCircle />,
         path: "#",
