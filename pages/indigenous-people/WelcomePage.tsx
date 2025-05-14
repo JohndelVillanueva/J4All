@@ -59,7 +59,7 @@ const IndigenousWelcomePage = () => {
             <div className="w-20 h-1 bg-amber-700 rounded-full"></div>
           </div>
           <h1 className="text-5xl font-bold text-amber-900 mb-6">
-            Honoring <span className="text-amber-700">Indigenous Heritage</span>
+            Honoring <span className="text-amber-700">Indigenous Heritage</span> 
           </h1>
           <p className="text-xl text-amber-800 mb-8 max-w-2xl mx-auto">
             Celebrating the rich cultural heritage, traditions, and wisdom of
@@ -67,7 +67,7 @@ const IndigenousWelcomePage = () => {
           </p>
           <div className="mt-12 rounded-xl overflow-hidden shadow-xl max-w-4xl mx-auto">
             <img
-              src="../../public/Images/indi.jpg"
+              src="../Images/indi.jpg"
               alt="Indigenous community gathering"
               className="w-full h-auto object-cover"
               loading="lazy"
