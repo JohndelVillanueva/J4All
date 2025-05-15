@@ -13,9 +13,9 @@ const AdminWelcomePage = () => {
     navigate(`/${label.toLowerCase().replace(' ', '-')}`);
   };
 
-  const handleFindJobClick = () => {
-    navigate('/find-job');
-  };
+  // const handleFindJobClick = () => {
+  //   navigate('/find-job');
+  // };
 
   const cardData: { label: LabelType; subtitle: string; color: string; hoverClass: string }[] = [
     { label: 'PWD', subtitle: 'Persons with Disabilities', color: 'blue', hoverClass: 'hover:bg-blue-50' },
@@ -31,12 +31,12 @@ const AdminWelcomePage = () => {
           <div className="mx-auto">
             <div className="flex justify-between items-center">
               <h1 className="text-2xl font-bold">Welcome to the Dashboard</h1>
-              <button 
+              {/* <button 
                 onClick={handleFindJobClick}
                 className="bg-blue-700 hover:bg-red-900 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-colors"
               >
                 Find Job
-              </button>
+              </button> */}
             </div>
             <p className="mt-2">Select a Card to view more details</p>
             
