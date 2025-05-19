@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FaUser, FaLock, FaEye, FaEyeSlash, FaAccessibleIcon, FaGlobeAmericas, FaQuestionCircle } from 'react-icons/fa';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -100,10 +100,28 @@ const UserTypeButton: React.FC<{
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();  // Add this
   const [showPassword, setShowPassword] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showHelpTooltip, setShowHelpTooltip] = useState(false);
+  const [showRegistrationSuccess, setShowRegistrationSuccess] = useState(false);  // Add this
   const formRef = useFocusTrap();
+
+    // Add this useEffect for handling the registration success notification
+    useEffect(() => {
+      // Check if coming from registration
+      if (location.state?.fromRegistration || sessionStorage.getItem('registrationSuccess')) {
+        setShowRegistrationSuccess(true);
+        sessionStorage.removeItem('registrationSuccess');
+        
+        // Hide after 5 seconds
+        const timer = setTimeout(() => {
+          setShowRegistrationSuccess(false);
+        }, 5000);
+        
+        return () => clearTimeout(timer);
+      }
+    }, [location]);
 
   const {
     register,
@@ -152,6 +170,25 @@ const LoginPage: React.FC = () => {
   }, []);
 
   return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden">
+    {/* Add this notification */}
+    <AnimatePresence>
+      {showRegistrationSuccess && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -20 }}
+          className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50"
+        >
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-lg shadow-lg flex items-center">
+            <svg className="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+            </svg>
+            <span>Account successfully registered! Please log in.</span>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
     <div 
       className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 overflow-hidden"
       style={{
@@ -480,7 +517,7 @@ const LoginPage: React.FC = () => {
               whileTap={{ scale: 0.99 }}
             >
               <a
-                href="#"
+                href="/SignUpPage"
                 className="w-full inline-flex justify-center py-2.5 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
               >
                 Create New Account
@@ -489,6 +526,7 @@ const LoginPage: React.FC = () => {
           </div>
         </motion.div>
       </div>
+    </div>
     </div>
   );
 };
