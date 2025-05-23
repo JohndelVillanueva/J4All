@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import type { JSX } from 'react';
 
 // Type definitions
-type UserType = 'general' | 'pwd' | 'indigenous' | 'employer';
+type UserType = 'general' | 'pwd' | 'indigenous';
 
 interface SignUpFormData {
   firstName: string;
@@ -36,7 +36,7 @@ const signUpSchema = z.object({
     .regex(/[0-9]/, 'Password must contain at least one number')
     .regex(/[^A-Za-z0-9]/, 'Password must contain at least one special character'),
   confirmPassword: z.string().min(1, 'Please confirm your password'),
-  userType: z.enum(['general', 'pwd', 'indigenous', 'employer']),
+  userType: z.enum(['general', 'pwd', 'indigenous']),
   agreeToTerms: z.literal(true, {
     errorMap: () => ({ message: 'You must agree to the terms and conditions' }),
   }),
@@ -91,15 +91,13 @@ const UserTypeButton: React.FC<{
   const labelMap: Record<UserType, string> = {
     general: 'General User',
     pwd: 'Person with Disability',
-    indigenous: 'Indigenous Person',
-    employer: 'Employer'
+    indigenous: 'Indigenous Person'
   };
 
   const iconMap: Record<UserType, JSX.Element> = {
     general: <FaUser className="mr-1" />,
     pwd: <FaAccessibleIcon className="mr-1" />,
-    indigenous: <FaGlobeAmericas className="mr-1" />,
-    employer: <FaUser className="mr-1" />
+    indigenous: <FaGlobeAmericas className="mr-1" />
   };
 
   return (
@@ -151,8 +149,20 @@ const SignUpPage: React.FC = () => {
   const onSubmit: SubmitHandler<SignUpFormData> = async (data) => {
     setIsSubmitting(true);
     setError(null);
+    
     try {
-      console.log('Sending registration request...');
+      // Log the request for debugging
+      console.log('Sending registration request to:', '/api/create');
+      console.log('Request payload:', {
+        username: data.email,
+        email: data.email,
+        password: '[HIDDEN]', // Don't log actual password
+        user_type: data.userType,
+        first_name: data.firstName,
+        last_name: data.lastName,
+        phone_number: data.phone,
+      });
+
       const response = await fetch('/api/create', {
         method: 'POST',
         headers: {
@@ -170,35 +180,33 @@ const SignUpPage: React.FC = () => {
         credentials: 'include',
       });
 
-      console.log('Response status:', response.status);
-      console.log('Response headers:', Object.fromEntries(response.headers.entries()));
       const responseText = await response.text();
       console.log('Raw response:', responseText);
-      console.log('Response length:', responseText.length);
-      console.log('First 10 characters:', responseText.substring(0, 10));
-      
-      let responseData;
-      try {
-        responseData = JSON.parse(responseText);
-      } catch (e) {
-        console.error('Failed to parse response as JSON:', e);
-        console.error('Response text that failed to parse:', responseText);
-        throw new Error('Invalid response from server');
-      }
 
       if (!response.ok) {
+        // Try to parse error response if exists
+        let errorData = { error: 'Unknown server error' };
+        try {
+          errorData = responseText ? JSON.parse(responseText) : errorData;
+        } catch (e) {
+          console.error('Failed to parse error response:', e);
+        }
+        
         if (response.status === 409) {
           throw new Error('This email is already registered. Please use a different email or try logging in.');
         } else if (response.status === 400) {
-          throw new Error(responseData.error || 'Please check your input and try again.');
+          throw new Error(errorData.error || 'Invalid request. Please check your input and try again.');
         } else if (response.status === 429) {
           throw new Error('Too many attempts. Please try again later.');
         } else {
-          throw new Error(responseData.error || 'Registration failed. Please try again.');
+          throw new Error(errorData.error || `Server error: ${response.status} ${response.statusText}`);
         }
       }
 
-      // Success handling
+      // Handle successful response
+      const responseData = responseText ? JSON.parse(responseText) : {};
+      console.log('Registration successful:', responseData);
+
       sessionStorage.setItem('registrationSuccess', 'true');
       navigate('/', {
         state: { 
@@ -210,15 +218,15 @@ const SignUpPage: React.FC = () => {
       
     } catch (err) {
       console.error('Registration error:', err);
+      
+      let errorMessage = 'An unexpected error occurred';
       if (err instanceof TypeError && err.message === 'Failed to fetch') {
-        setError('Unable to connect to the server. Please check your internet connection and try again.');
-      } else {
-        setError(
-          err instanceof Error ? 
-          err.message : 
-          'An unexpected error occurred. Please try again.'
-        );
+        errorMessage = 'Unable to connect to the server. Please check your internet connection and try again.';
+      } else if (err instanceof Error) {
+        errorMessage = err.message;
       }
+      
+      setError(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
@@ -383,8 +391,8 @@ const SignUpPage: React.FC = () => {
               <legend className="block text-sm font-medium text-gray-700 mb-2">
                 I am a:
               </legend>
-              <div className="grid grid-cols-4 gap-2">
-                {(['general', 'pwd', 'indigenous', 'employer'] as UserType[]).map((type) => (
+              <div className="grid grid-cols-3 gap-2">
+                {(['general', 'pwd', 'indigenous'] as UserType[]).map((type) => (
                   <UserTypeButton
                     key={type}
                     type={type}
