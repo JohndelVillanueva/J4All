@@ -10,6 +10,7 @@ import {
   FaCheckCircle,
   FaTimesCircle,
   FaClock,
+  FaUserFriends,
 } from "react-icons/fa";
 import DynamicHeader from "../../components/JobSeekerDashboard/DynamicHeader";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +22,7 @@ import {
   Applicant,
 } from "../../components/types/types";
 import CreatePositionModal from "../../components/EmployerDashboard/CreatePositionModal";
+import EmployerMessageModal from "../../components/EmployerDashboard/EmployerMessageModal";
 import { useAuth } from "../../contexts/AuthContext";
 
 interface JobPosting {
@@ -57,6 +59,8 @@ const EmployerDashboardPage = () => {
   const [isLoadingApplicants, setIsLoadingApplicants] = useState(false);
   const [jobError, setJobError] = useState<string | null>(null);
   const [applicantsError, setApplicantsError] = useState<string | null>(null);
+  const [selectedApplicant, setSelectedApplicant] = useState<Applicant | null>(null);
+  const [isMessageModalOpen, setIsMessageModalOpen] = useState(false);
 
   // Guard: Show loading spinner while auth is loading
   if (loading) {
@@ -354,6 +358,9 @@ const handleCreateJobPosting = async (data: {
 };
 console.log('EmployerDashboard mounted');
 
+  // Debug: Show modal state
+  console.log("Render: isMessageModalOpen", isMessageModalOpen, "selectedApplicant", selectedApplicant);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <DynamicHeader
@@ -583,9 +590,17 @@ console.log('EmployerDashboard mounted');
                       <li key={job.id}>
                         <div className="px-4 py-4 sm:px-6">
                           <div className="flex items-center justify-between">
-                            <p className="text-lg font-medium text-blue-600 truncate">
-                              {job.job_title}
-                            </p>
+                            <div className="flex items-center">
+                              <p className="text-lg font-medium text-blue-600 truncate">
+                                {job.job_title}
+                              </p>
+                              {typeof job.applicants !== 'undefined' && (
+                                <span className="inline-flex items-center px-2 py-1 ml-3 text-xs font-semibold rounded-full bg-blue-50 text-blue-700">
+                                  <FaUserFriends className="mr-1" />
+                                  {job.applicants} applicant{job.applicants === 1 ? '' : 's'}
+                                </span>
+                              )}
+                            </div>
                             <div className="ml-2 flex-shrink-0 flex">
                               {job.status === "active" ? (
                                 <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
@@ -601,10 +616,6 @@ console.log('EmployerDashboard mounted');
                           <div className="mt-2 sm:flex sm:justify-between">
                             <div className="sm:flex">
                               <p className="flex items-center text-sm text-gray-500">
-                                <FaUserTie className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
-                                {job.applicants} applicants
-                              </p>
-                              <p className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
                                 <FaCalendarAlt className="flex-shrink-0 mr-1.5 h-4 w-4 text-gray-400" />
                                 Posted on {new Date(job.posted_date).toLocaleDateString()}
                               </p>
@@ -769,7 +780,17 @@ console.log('EmployerDashboard mounted');
                             <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                               View Profile
                             </button>
-                            <button className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            <button 
+                              onClick={() => {
+                                console.log("Message button clicked", applicant);
+                                setSelectedApplicant(applicant);
+                                setIsMessageModalOpen(true);
+                                setTimeout(() => {
+                                  console.log("After set: isMessageModalOpen", isMessageModalOpen, "selectedApplicant", selectedApplicant);
+                                }, 100);
+                              }}
+                              className="inline-flex items-center px-3 py-1 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            >
                               Message
                             </button>
                             {applicant.status === "pending" && (
@@ -823,6 +844,19 @@ console.log('EmployerDashboard mounted');
         onClose={() => setIsModalOpen(false)}
         onSubmit={handleCreateJobPosting}
       />
+      {isMessageModalOpen && selectedApplicant && (
+        <EmployerMessageModal
+          applicant={selectedApplicant}
+          onClose={() => {
+            setIsMessageModalOpen(false);
+            setSelectedApplicant(null);
+          }}
+          onSendMessage={() => {
+            // Optionally refresh data or show success message
+            console.log('Message sent successfully');
+          }}
+        />
+      )}
     </div>
   );
 };
