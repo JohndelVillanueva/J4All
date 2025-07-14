@@ -60,6 +60,7 @@ const JobDescriptionModal: React.FC<JobDescriptionModalProps> = ({
           return;
         }
 
+        await onUnsaveJob(Number(job.id));
         showToast({
           type: 'success',
           title: 'Job Removed',
