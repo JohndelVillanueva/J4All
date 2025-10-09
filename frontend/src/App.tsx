@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import Layout from "../layouts/Layout";
 import Login from "../pages/auth/Login";
-import SignUpPage from "../pages/auth/SignUp";
+// import SignUpPage from "../pages/auth/SignUp";
+import SignUpPage from "../pages/auth/Signup";
 import EmployerSignUpForm from "../pages/auth/EmployerSignUp";
 import EmailVerification from "../pages/auth/EmailVerification";
 import { AuthProvider } from "../contexts/AuthContext";
@@ -20,6 +21,7 @@ const ApplicantDashboard = lazy(
 const AdminDashboard = lazy(() => import("../routing/admin/AdminDashboard"));
 const EmployerDashboard = lazy(() => import("../routing/employer/EmployerDashboard"));
 const StatisticsPage = lazy(() => import("../pages/admin/StatisticsPage"));
+const LandingPage = lazy(() => import("../pages/LandingPage"));
 
 
 export default function App() {
@@ -30,7 +32,7 @@ export default function App() {
           <Router>
             <Layout>
               <Routes>
-                <Route path="/" element={<Login />} />
+                <Route path="/" element={<LandingPage />} />
                 <Route path="/SignUpPage" element={<SignUpPage />} />
                 <Route path="/EmployerSignUpForm" element={<EmployerSignUpForm />} />
                 <Route path="/verify-email" element={<EmailVerification />} />
@@ -47,14 +49,6 @@ export default function App() {
                     </Suspense>
                   }
                 />
-                {/* <Route
-                  path="/PWDDashboard"
-                  element={
-                    <Suspense fallback={<LoadingScreen />}>
-                      <PWDDashboard />
-                    </Suspense>
-                  }
-                /> */}
                 <Route
                   path="/EmployerDashboard"
                   element={
