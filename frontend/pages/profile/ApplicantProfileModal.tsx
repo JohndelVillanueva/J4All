@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBriefcase, FaGraduationCap, FaMapMarkerAlt, FaStar, FaEye, FaEyeSlash } from "react-icons/fa";
+import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBriefcase, FaGraduationCap, FaMapMarkerAlt, FaStar } from "react-icons/fa";
 import UserAvatar from "../../components/UserAvatar";
 import { useToast } from "../../components/ToastContainer";
 import { handleApiError } from "../../src/utils/errorHandler";
@@ -56,7 +56,7 @@ const ApplicantProfileModal: React.FC<ApplicantProfileModalProps> = ({
   const [profileData, setProfileData] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showResume, setShowResume] = useState(false);
+  // const [showResume, setShowResume] = useState(false);
   const { showToast } = useToast();
 
   useEffect(() => {
@@ -299,7 +299,7 @@ const ApplicantProfileModal: React.FC<ApplicantProfileModalProps> = ({
                   </div>
 
                   {/* Resume */}
-                  <div className="bg-white border border-gray-200 rounded-xl p-6">
+                  {/* <div className="bg-white border border-gray-200 rounded-xl p-6">
                     <h4 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
                       <FaBriefcase className="mr-2 text-blue-600" />
                       Resume
@@ -342,7 +342,7 @@ const ApplicantProfileModal: React.FC<ApplicantProfileModalProps> = ({
                         </a>
                       </div>
                     )}
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>
